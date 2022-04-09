@@ -1,0 +1,15 @@
+{
+  "name": "gulp-web-app",
+  "version": "1.0.0",
+  "description": "web app",
+  "main": "gulpfile.js",
+  "author": "huitoutunao",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "sass": "^1.50.0"
+  }
+}
