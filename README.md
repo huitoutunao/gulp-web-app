@@ -1,3 +1,3 @@
 # gulp-web-app
 
-`gulp4.x` 搭建前端网页开发模板。
+`gulp4.x` 搭建现代 `web` 模板。
