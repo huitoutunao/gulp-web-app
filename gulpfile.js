@@ -88,5 +88,8 @@ const delHandler = function() {
 }
 exports.delHandler = delHandler
 
-const defTask = series(delHandler, parallel(cssHandler, sassHandler, jsHandler, imageHandler, fontHandler, iconsHandler, mediaHandler))
+const defTask = series(
+  delHandler,
+  parallel(cssHandler, sassHandler, jsHandler, imageHandler, fontHandler, iconsHandler, mediaHandler)
+)
 exports.default = defTask
