@@ -1,10 +1,11 @@
-const { src, dest, parallel } = require('gulp')
+const { src, dest, parallel, series } = require('gulp')
 const sass = require('gulp-sass')(require('sass'))
 const autoprefixer = require('gulp-autoprefixer')
 const sourcemaps = require('gulp-sourcemaps')
 const concat = require('gulp-concat')
 const babel = require('gulp-babel')
 const uglify = require('gulp-uglify')
+const del = require('del')
 
 const Path = {
   dev: {
@@ -82,5 +83,10 @@ const mediaHandler = function() {
 }
 exports.mediaHandler = mediaHandler
 
-const defTask = parallel(cssHandler, sassHandler, jsHandler, imageHandler, fontHandler, iconsHandler, mediaHandler)
+const delHandler = function() {
+  return del(['./dist'])
+}
+exports.delHandler = delHandler
+
+const defTask = series(delHandler, parallel(cssHandler, sassHandler, jsHandler, imageHandler, fontHandler, iconsHandler, mediaHandler))
 exports.default = defTask
