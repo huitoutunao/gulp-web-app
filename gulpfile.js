@@ -70,7 +70,7 @@ const sassHandler = function() {
 }
 exports.sassHandler = sassHandler
 
-const jsHandler = function() {
+const esHandler = function() {
   return src(`${Path.dev.script}es6/*.js`)
     .pipe(babel({
       presets: ['@babel/env']
@@ -78,7 +78,13 @@ const jsHandler = function() {
     .pipe(uglify())
     .pipe(dest(Path.build.script))
 }
-exports.jsHandler = jsHandler
+
+const moveJsHandler = function() {
+  return src(`${Path.dev.script}*.js`)
+    .pipe(dest(Path.build.script))
+}
+
+const jsHandler = parallel(esHandler, moveJsHandler)
 
 const jsLibHandler = function() {
   return src(Path.dev.scriptLib)
@@ -118,7 +124,7 @@ const delHandler = function() {
 exports.delHandler = delHandler
 
 const webHandler = function() {
-  const randomPort = parseInt(Math.random() * 1000 + 1000)
+  const randomPort = parseInt(Math.random() * 1000 + 3000)
   return src('./dist')
   .pipe(webserver({
     host: 'localhost',
