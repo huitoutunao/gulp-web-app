@@ -1,23 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../assets/style/index.css">
-</head>
-<body>
-  @@include('./header.html', {
-    title: '头部组件',
-    show: ''
-  })
+@@include('./head.html', {
+  title: '首页',
+  isShowActive: 'acc',
+  webRoot: '..'
+})
 
-  <hr>
-  <hr>
+<div class="content">首页的内容</div>
 
-  @@include('./footer.html', {
-    title: '底部组件'
-  })
-</body>
-</html>
+@@include('./footer.html', {
+  title: '底部组件',
+  isShowActive: 'active',
+  isLoadCustomScript: true,
+  customJsFile: 'helper.js',
+  webRoot: '..'
+})

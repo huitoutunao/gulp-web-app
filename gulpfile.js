@@ -14,9 +14,10 @@ const Path = {
   dev: {
     views: './src/views/**/*.html',
     components: './src/components/',
-    script: './src/script/',
     style: './src/assets/style/',
     styleLib: './src/assets/style/lib/*.css',
+    script: './src/script/',
+    scriptLib: './src/script/lib/*.js',
     images: './src/assets/images/**',
     icons: './src/assets/icons/**',
     font: './src/assets/font/**',
@@ -38,18 +39,24 @@ const htmlHandler = function() {
   return src(Path.dev.views)
     .pipe(fileinclude({
       prefix: '@@',
-      basepath: Path.dev.components
+      basepath: Path.dev.components,
+      context: {
+        isLoadCustomStyle: false,
+        isLoadDefaultScript: true,
+        isLoadCustomScript: false
+      }
     }))
     .pipe(dest(Path.build.views))
 }
 exports.htmlHandler = htmlHandler
 
-const cssHandler = function() {
+// 处理插件样式
+const styleLibHandler = function() {
   return src(Path.dev.styleLib)
     .pipe(concat('vendors.css'))
     .pipe(dest(Path.build.style))
 }
-exports.cssHandler = cssHandler
+exports.styleLibHandler = styleLibHandler
 
 const sassHandler = function() {
   return src(`${Path.dev.style}index.scss`)
@@ -72,6 +79,14 @@ const jsHandler = function() {
     .pipe(dest(Path.build.script))
 }
 exports.jsHandler = jsHandler
+
+const jsLibHandler = function() {
+  return src(Path.dev.scriptLib)
+    .pipe(concat('vendors.js'))
+    .pipe(uglify())
+    .pipe(dest(Path.build.script))
+}
+exports.jsLibHandler = jsLibHandler
 
 const imagesHandler = function() {
   return src(Path.dev.images)
@@ -114,16 +129,31 @@ const webHandler = function() {
 }
 exports.webHandler = webHandler
 
+// TODO: 字体、图片和媒体文件等未添加至监控系统
 const watchHandler = function() {
-  watch([`${Path.dev.views}`, `${Path.dev.components}`], htmlHandler)
-  watch(`${Path.dev.styleLib}`, cssHandler)
+  watch([`${Path.dev.views}`, `${Path.dev.components}**/*.html`], htmlHandler)
+  watch(`${Path.dev.styleLib}`, styleLibHandler)
   watch(`${Path.dev.style}**/*.scss`, sassHandler)
-  watch(`${Path.dev.script}**/*.js`, jsHandler)
+  watch(`${Path.dev.script}es6/*.js`, jsHandler)
+  watch(`${Path.dev.scriptLib}`, jsLibHandler)
 }
 
 const defTask = series(
   delHandler,
-  parallel(htmlHandler, cssHandler, sassHandler, jsHandler, imagesHandler, fontHandler, iconsHandler, mediaHandler),
-  parallel(webHandler, watchHandler)
+  parallel(
+    htmlHandler,
+    styleLibHandler,
+    sassHandler,
+    jsHandler,
+    jsLibHandler,
+    imagesHandler,
+    fontHandler,
+    iconsHandler,
+    mediaHandler
+  ),
+  parallel(
+    webHandler,
+    watchHandler
+  )
 )
 exports.default = defTask

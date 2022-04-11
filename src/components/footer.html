@@ -1,1 +1,12 @@
 <h1>@@title-更新</h1>
+<p class="p @@isShowActive">公共的内容-首页</p>
+
+</body>
+<script src="@@webRoot/script/vendors.js"></script>
+@@if (isLoadDefaultScript === true) {
+  <script src="@@webRoot/script/index.js"></script>
+}
+@@if (isLoadCustomScript === true) {
+  <script src="@@webRoot/script/@@customJsFile"></script>
+}
+</html>
