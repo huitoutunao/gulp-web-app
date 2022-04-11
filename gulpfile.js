@@ -109,7 +109,7 @@ const webHandler = function() {
     host: 'localhost',
     port: randomPort,
     livereload: true,
-    open: './views/index.html',
+    open: './views/',
   }))
 }
 exports.webHandler = webHandler
