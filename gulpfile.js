@@ -59,11 +59,11 @@ const jsHandler = function() {
 }
 exports.jsHandler = jsHandler
 
-const imageHandler = function() {
+const imagesHandler = function() {
   return src(Path.dev.images)
     .pipe(dest(Path.build.images))
 }
-exports.imageHandler = imageHandler
+exports.imagesHandler = imagesHandler
 
 const fontHandler = function() {
   return src(Path.dev.font)
@@ -90,6 +90,6 @@ exports.delHandler = delHandler
 
 const defTask = series(
   delHandler,
-  parallel(cssHandler, sassHandler, jsHandler, imageHandler, fontHandler, iconsHandler, mediaHandler)
+  parallel(cssHandler, sassHandler, jsHandler, imagesHandler, fontHandler, iconsHandler, mediaHandler)
 )
 exports.default = defTask
