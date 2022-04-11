@@ -7,11 +7,13 @@ const babel = require('gulp-babel')
 const uglify = require('gulp-uglify')
 const del = require('del')
 const webserver = require('gulp-webserver')
+const fileinclude = require('gulp-file-include')
 
 // TODO: dist 文件夹下面分出 dev 和 build 分别代表开发和生产
 const Path = {
   dev: {
     views: './src/views/**/*.html',
+    components: './src/components/',
     script: './src/script/',
     style: './src/assets/style/',
     styleLib: './src/assets/style/lib/*.css',
@@ -34,6 +36,10 @@ const Path = {
 
 const htmlHandler = function() {
   return src(Path.dev.views)
+    .pipe(fileinclude({
+      prefix: '@@',
+      basepath: Path.dev.components
+    }))
     .pipe(dest(Path.build.views))
 }
 exports.htmlHandler = htmlHandler
@@ -109,7 +115,7 @@ const webHandler = function() {
 exports.webHandler = webHandler
 
 const watchHandler = function() {
-  watch(`${Path.dev.views}`, htmlHandler)
+  watch([`${Path.dev.views}`, `${Path.dev.components}`], htmlHandler)
   watch(`${Path.dev.styleLib}`, cssHandler)
   watch(`${Path.dev.style}**/*.scss`, sassHandler)
   watch(`${Path.dev.script}**/*.js`, jsHandler)
