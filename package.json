@@ -17,6 +17,7 @@
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
+    "gulp-webserver": "^0.9.1",
     "sass": "^1.50.0"
   },
   "browserslist": [

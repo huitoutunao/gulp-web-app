@@ -1,4 +1,4 @@
-const { src, dest, parallel, series } = require('gulp')
+const { src, dest, parallel, series, watch } = require('gulp')
 const sass = require('gulp-sass')(require('sass'))
 const autoprefixer = require('gulp-autoprefixer')
 const sourcemaps = require('gulp-sourcemaps')
@@ -6,7 +6,9 @@ const concat = require('gulp-concat')
 const babel = require('gulp-babel')
 const uglify = require('gulp-uglify')
 const del = require('del')
+const webserver = require('gulp-webserver')
 
+// TODO: dist 文件夹下面分出 dev 和 build 分别代表开发和生产
 const Path = {
   dev: {
     views: './src/views/**/*.html',
@@ -29,6 +31,12 @@ const Path = {
     media: './dist/assets/media/',
   },
 }
+
+const htmlHandler = function() {
+  return src(Path.dev.views)
+    .pipe(dest(Path.build.views))
+}
+exports.htmlHandler = htmlHandler
 
 const cssHandler = function() {
   return src(Path.dev.styleLib)
@@ -88,8 +96,28 @@ const delHandler = function() {
 }
 exports.delHandler = delHandler
 
+const webHandler = function() {
+  const randomPort = parseInt(Math.random() * 1000 + 1000)
+  return src('./dist')
+  .pipe(webserver({
+    host: 'localhost',
+    port: randomPort,
+    livereload: true,
+    open: './views/index.html',
+  }))
+}
+exports.webHandler = webHandler
+
+const watchHandler = function() {
+  watch(`${Path.dev.views}`, htmlHandler)
+  watch(`${Path.dev.styleLib}`, cssHandler)
+  watch(`${Path.dev.style}**/*.scss`, sassHandler)
+  watch(`${Path.dev.script}**/*.js`, jsHandler)
+}
+
 const defTask = series(
   delHandler,
-  parallel(cssHandler, sassHandler, jsHandler, imagesHandler, fontHandler, iconsHandler, mediaHandler)
+  parallel(htmlHandler, cssHandler, sassHandler, jsHandler, imagesHandler, fontHandler, iconsHandler, mediaHandler),
+  parallel(webHandler, watchHandler)
 )
 exports.default = defTask
