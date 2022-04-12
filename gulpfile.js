@@ -8,6 +8,7 @@ const uglify = require('gulp-uglify')
 const del = require('del')
 const webserver = require('gulp-webserver')
 const fileinclude = require('gulp-file-include')
+const eslint = require('gulp-eslint-new')
 
 // TODO: dist 文件夹下面分出 dev 和 build 分别代表开发和生产
 const Path = {
@@ -70,6 +71,17 @@ const sassHandler = function() {
 }
 exports.sassHandler = sassHandler
 
+const eslintHandler = function() {
+  return src(`${Path.dev.script}es6/*.js`)
+    .pipe(eslint({
+      fix: true
+    }))
+    .pipe(eslint.fix())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError())
+}
+exports.eslintHandler = eslintHandler
+
 const esHandler = function() {
   return src(`${Path.dev.script}es6/*.js`)
     .pipe(babel({
@@ -84,7 +96,7 @@ const moveJsHandler = function() {
     .pipe(dest(Path.build.script))
 }
 
-const jsHandler = parallel(esHandler, moveJsHandler)
+const jsHandler = series(eslintHandler, parallel(esHandler, moveJsHandler))
 
 const jsLibHandler = function() {
   return src(Path.dev.scriptLib)

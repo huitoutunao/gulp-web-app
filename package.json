@@ -7,16 +7,21 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "gulp"
+    "dev": "gulp",
+    "lint": "eslint --fix ./src/script/es6/*.js"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
     "del": "^6.0.0",
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",
+    "gulp-eslint-new": "^1.4.2",
     "gulp-file-include": "^2.3.0",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",

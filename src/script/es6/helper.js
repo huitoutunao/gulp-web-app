@@ -1,5 +1,1 @@
-const isTrue = true
-
-if (isTrue) {
-  console.log('isTrue')
-}
+// helper.js
