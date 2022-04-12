@@ -8,7 +8,8 @@
   "private": true,
   "scripts": {
     "dev": "gulp",
-    "lint": "eslint --fix ./src/script/es6/*.js"
+    "lint:js": "eslint --fix ./src/script/es6/*.js",
+    "lint:css": "stylelint --fix ./src/assets/style/**/*.scss"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
@@ -25,9 +26,15 @@
     "gulp-file-include": "^2.3.0",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
+    "gulp-stylelint": "^13.0.0",
     "gulp-uglify": "^3.0.2",
     "gulp-webserver": "^0.9.1",
-    "sass": "^1.50.0"
+    "postcss-scss": "^4.0.3",
+    "sass": "^1.50.0",
+    "stylelint": "^14.6.1",
+    "stylelint-config-recess-order": "^3.0.0",
+    "stylelint-config-recommended-scss": "^6.0.0",
+    "stylelint-scss": "^4.2.0"
   },
   "browserslist": [
     "last 2 versions",

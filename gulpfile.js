@@ -9,6 +9,7 @@ const del = require('del')
 const webserver = require('gulp-webserver')
 const fileinclude = require('gulp-file-include')
 const eslint = require('gulp-eslint-new')
+const cssLint = require('gulp-stylelint')
 
 // TODO: dist 文件夹下面分出 dev 和 build 分别代表开发和生产
 const Path = {
@@ -59,7 +60,18 @@ const styleLibHandler = function() {
 }
 exports.styleLibHandler = styleLibHandler
 
-const sassHandler = function() {
+const cssLintHandler = function() {
+  return src(`${Path.dev.style}**/*.scss`)
+    .pipe(cssLint({
+      reporters: [{
+        formatter: 'string',
+        console: true,
+      }]
+    }))
+}
+exports.cssLintHandler = cssLintHandler
+
+const sassHandler = series(cssLintHandler, function() {
   return src(`${Path.dev.style}index.scss`)
     .pipe(sourcemaps.init())
     .pipe(autoprefixer())
@@ -68,7 +80,7 @@ const sassHandler = function() {
     }).on('error', sass.logError))
     .pipe(sourcemaps.write('./maps'))
     .pipe(dest(Path.build.style))
-}
+})
 exports.sassHandler = sassHandler
 
 const eslintHandler = function() {
