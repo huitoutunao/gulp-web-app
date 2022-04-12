@@ -1,4 +1,6 @@
-const { src, dest, parallel, series, watch } = require('gulp')
+const {
+  src, dest, parallel, series, watch,
+} = require('gulp')
 const sass = require('gulp-sass')(require('sass'))
 const autoprefixer = require('gulp-autoprefixer')
 const sourcemaps = require('gulp-sourcemaps')
@@ -37,7 +39,7 @@ const Path = {
   },
 }
 
-const htmlHandler = function() {
+const htmlHandler = function () {
   return src(Path.dev.views)
     .pipe(fileinclude({
       prefix: '@@',
@@ -45,48 +47,46 @@ const htmlHandler = function() {
       context: {
         isLoadCustomStyle: false,
         isLoadDefaultScript: true,
-        isLoadCustomScript: false
-      }
+        isLoadCustomScript: false,
+      },
     }))
     .pipe(dest(Path.build.views))
 }
 exports.htmlHandler = htmlHandler
 
 // 处理插件样式
-const styleLibHandler = function() {
+const styleLibHandler = function () {
   return src(Path.dev.styleLib)
     .pipe(concat('vendors.css'))
     .pipe(dest(Path.build.style))
 }
 exports.styleLibHandler = styleLibHandler
 
-const cssLintHandler = function() {
+const cssLintHandler = function () {
   return src(`${Path.dev.style}**/*.scss`)
     .pipe(cssLint({
       reporters: [{
         formatter: 'string',
         console: true,
-      }]
+      }],
     }))
 }
 exports.cssLintHandler = cssLintHandler
 
-const sassHandler = series(cssLintHandler, function() {
-  return src(`${Path.dev.style}index.scss`)
-    .pipe(sourcemaps.init())
-    .pipe(autoprefixer())
-    .pipe(sass({
-      outputStyle: 'compressed'
-    }).on('error', sass.logError))
-    .pipe(sourcemaps.write('./maps'))
-    .pipe(dest(Path.build.style))
-})
+const sassHandler = series(cssLintHandler, () => src(`${Path.dev.style}index.scss`)
+  .pipe(sourcemaps.init())
+  .pipe(autoprefixer())
+  .pipe(sass({
+    outputStyle: 'compressed',
+  }).on('error', sass.logError))
+  .pipe(sourcemaps.write('./maps'))
+  .pipe(dest(Path.build.style)))
 exports.sassHandler = sassHandler
 
-const eslintHandler = function() {
+const eslintHandler = function () {
   return src(`${Path.dev.script}es6/*.js`)
     .pipe(eslint({
-      fix: true
+      fix: true,
     }))
     .pipe(eslint.fix())
     .pipe(eslint.format())
@@ -94,23 +94,23 @@ const eslintHandler = function() {
 }
 exports.eslintHandler = eslintHandler
 
-const esHandler = function() {
+const esHandler = function () {
   return src(`${Path.dev.script}es6/*.js`)
     .pipe(babel({
-      presets: ['@babel/env']
+      presets: ['@babel/env'],
     }))
     .pipe(uglify())
     .pipe(dest(Path.build.script))
 }
 
-const moveJsHandler = function() {
+const moveJsHandler = function () {
   return src(`${Path.dev.script}*.js`)
     .pipe(dest(Path.build.script))
 }
 
 const jsHandler = series(eslintHandler, parallel(esHandler, moveJsHandler))
 
-const jsLibHandler = function() {
+const jsLibHandler = function () {
   return src(Path.dev.scriptLib)
     .pipe(concat('vendors.js'))
     .pipe(uglify())
@@ -118,49 +118,49 @@ const jsLibHandler = function() {
 }
 exports.jsLibHandler = jsLibHandler
 
-const imagesHandler = function() {
+const imagesHandler = function () {
   return src(Path.dev.images)
     .pipe(dest(Path.build.images))
 }
 exports.imagesHandler = imagesHandler
 
-const fontHandler = function() {
+const fontHandler = function () {
   return src(Path.dev.font)
     .pipe(dest(Path.build.font))
 }
 exports.fontHandler = fontHandler
 
-const iconsHandler = function() {
+const iconsHandler = function () {
   return src(Path.dev.icons)
     .pipe(dest(Path.build.icons))
 }
 exports.iconsHandler = iconsHandler
 
-const mediaHandler = function() {
+const mediaHandler = function () {
   return src(Path.dev.media)
     .pipe(dest(Path.build.media))
 }
 exports.mediaHandler = mediaHandler
 
-const delHandler = function() {
+const delHandler = function () {
   return del(['./dist'])
 }
 exports.delHandler = delHandler
 
-const webHandler = function() {
-  const randomPort = parseInt(Math.random() * 1000 + 3000)
+const webHandler = function () {
+  const randomPort = parseInt(Math.random() * 1000 + 3000, 10)
   return src('./dist')
-  .pipe(webserver({
-    host: 'localhost',
-    port: randomPort,
-    livereload: true,
-    open: './views/',
-  }))
+    .pipe(webserver({
+      host: 'localhost',
+      port: randomPort,
+      livereload: true,
+      open: './views/',
+    }))
 }
 exports.webHandler = webHandler
 
 // TODO: 字体、图片和媒体文件等未添加至监控系统
-const watchHandler = function() {
+const watchHandler = function () {
   watch([`${Path.dev.views}`, `${Path.dev.components}**/*.html`], htmlHandler)
   watch(`${Path.dev.styleLib}`, styleLibHandler)
   watch(`${Path.dev.style}**/*.scss`, sassHandler)
@@ -179,11 +179,11 @@ const defTask = series(
     imagesHandler,
     fontHandler,
     iconsHandler,
-    mediaHandler
+    mediaHandler,
   ),
   parallel(
     webHandler,
-    watchHandler
-  )
+    watchHandler,
+  ),
 )
 exports.default = defTask

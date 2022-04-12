@@ -11,6 +11,7 @@ module.exports = {
   extends: 'airbnb-base',
   rules: {
     semi: ['error', 'never'],
-    'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }],
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+    'func-names': ['error', 'never'],
   },
 }

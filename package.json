@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "gulp",
-    "lint:js": "eslint --fix ./src/script/es6/*.js",
+    "lint:js": "eslint --fix ./src/script/es6/*.js ./gulpfile.js ./.eslintrc.js",
     "lint:css": "stylelint --fix ./src/assets/style/**/*.scss"
   },
   "devDependencies": {
