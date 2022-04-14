@@ -159,13 +159,16 @@ const webHandler = function () {
 }
 exports.webHandler = webHandler
 
-// TODO: 字体、图片和媒体文件等未添加至监控系统
 const watchHandler = function () {
   watch([`${Path.dev.views}`, `${Path.dev.components}**/*.html`], htmlHandler)
   watch(`${Path.dev.styleLib}`, styleLibHandler)
   watch(`${Path.dev.style}**/*.scss`, sassHandler)
   watch(`${Path.dev.script}es6/*.js`, jsHandler)
   watch(`${Path.dev.scriptLib}`, jsLibHandler)
+  watch(`${Path.dev.images}`, imagesHandler)
+  watch(`${Path.dev.font}`, fontHandler)
+  watch(`${Path.dev.icons}`, iconsHandler)
+  watch(`${Path.dev.media}`, mediaHandler)
 }
 
 const defTask = series(
