@@ -15,7 +15,7 @@ const cssLint = require('gulp-stylelint')
 const cache = require('gulp-cached')
 
 // TODO: dist 文件夹下面分出 dev 和 build 分别代表开发和生产
-// TODO: 启动过个服务需求，将 gulp-webserver 替换成 gulp-connect
+// TODO: 启动多个服务需求，将 gulp-webserver 替换成 gulp-connect
 const Path = {
   dev: {
     views: './src/views/**/*.html',
